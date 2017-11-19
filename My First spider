@@ -1,0 +1,16 @@
+import requests
+
+r = requests.get('https://movie.douban.com/top250').text
+
+from bs4 import BeautifulSoup
+soup = BeautifulSoup(r,'lxml')
+pattern = soup.find_all('span','title')
+for item in pattern:
+    print(item.string)
+
+import pandas as pd
+comments = []
+for item in pattern:
+    comments.append(item.string)
+df = pd.DataFrame(comments)
+df.to_csv('comments.csv')
